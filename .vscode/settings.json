@@ -1,6 +1,9 @@
 {
     "python.analysis.extraPaths": [
         "./src",
+        "./src",
+        "./src",
+        "./src",
         "./src"
     ],
     "python.testing.unittestArgs": [
