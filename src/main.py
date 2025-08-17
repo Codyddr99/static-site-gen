@@ -6,33 +6,41 @@ from block_markdown import markdown_to_blocks, block_to_block_type, BlockType, m
 from copy_static import copy_files_recursive
 from generate_page import generate_page, generate_pages_recursive
 import os
+import sys
 
 def main():
     print("="*60)
     print("STATIC SITE GENERATOR")
     print("="*60)
     
+    # Get basepath from CLI argument, default to "/"
+    basepath = "/"
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
+    
+    print(f"Using basepath: {basepath}")
+    
     # Get project paths
     current_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(current_dir)
     
     source_static = os.path.join(current_dir, "static")
-    dest_public = os.path.join(project_root, "public")
+    dest_docs = os.path.join(project_root, "docs")
     
-    # Step 1: Copy static files to public directory
+    # Step 1: Copy static files to docs directory
     print("\n--- Step 1: Copying static files ---")
-    copy_files_recursive(source_static, dest_public)
+    copy_files_recursive(source_static, dest_docs)
     
     # Step 2: Generate all pages from content directory
     print("\n--- Step 2: Generating all pages ---")
     content_dir = os.path.join(project_root, "content")
     template_path = os.path.join(project_root, "template.html")
     
-    generate_pages_recursive(content_dir, template_path, dest_public)
+    generate_pages_recursive(content_dir, template_path, dest_docs, basepath)
     
     print("\n--- Static site generation complete! ---")
-    print(f"Website generated in: {dest_public}")
-    print("You can now serve the site with: cd public && python3 -m http.server 8888")
+    print(f"Website generated in: {dest_docs}")
+    print("You can now serve the site with: cd docs && python3 -m http.server 8888")
     
     print("\n--- Testing TextNode and HTMLNode functionality ---")
     
